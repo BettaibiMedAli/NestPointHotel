@@ -6,5 +6,5 @@ import com.nestpointdev.NestPointHotel.models.Booking;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    Optional<Booking> findBookingConfirmationCode(String confirmationCode);
+    Optional<Booking> findByBookingConfirmationCode(String confirmationCode);
 }
