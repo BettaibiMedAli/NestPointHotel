@@ -1,6 +1,15 @@
 package com.nestpointdev.NestPointHotel.utils;
 
+import com.nestpointdev.NestPointHotel.dto.BookingDTO;
+import com.nestpointdev.NestPointHotel.dto.RoomDTO;
+import com.nestpointdev.NestPointHotel.dto.UserDTO;
+import com.nestpointdev.NestPointHotel.models.Booking;
+import com.nestpointdev.NestPointHotel.models.User;
+import com.nestpointdev.NestPointHotel.models.Room;
+
 import java.security.SecureRandom;
+import java.util.stream.Collectors;
+import java.util.*;
 
 public class Utils {
     private static final String Alphnumeric_string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -17,4 +26,112 @@ public class Utils {
         }
         return stringBuilder.toString();
     }
+
+    public static UserDTO mapUserEntityToUserDTO(User user)
+    {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setRole(user.getRole());
+        return userDTO;
+    }
+
+    public static RoomDTO mapRoomEntityToRoomDTO(Room room)
+    {
+        RoomDTO roomDTO = new RoomDTO();
+        roomDTO.setId(room.getId());
+        roomDTO.setRoomType(room.getRoomType());
+        roomDTO.setRoomPrice(room.getRoomPrice());
+        roomDTO.setRoomPhotoUrl(room.getRoomPhotoUrl());
+        roomDTO.setRoomDescription(room.getRoomDescription());
+        return roomDTO;
+    }
+
+    public static BookingDTO mapBookingEntityToBookingDTO(Booking booking)
+    {
+        BookingDTO bookingDTO = new BookingDTO();
+        bookingDTO.setId(booking.getId());
+        bookingDTO.setCheckInDate(booking.getCheckInDate());
+        bookingDTO.setCheckOutDate(booking.getCheckOutDate());
+        bookingDTO.setNumOfChildren(booking.getNumOfChildren());
+        bookingDTO.setNumOfAdults(booking.getNumOfAdults());
+        bookingDTO.setTotalNumOfGuests(booking.getTotalNumOfGuests());
+        bookingDTO.setBookingConfirmationCode(booking.getBookingConfirmationCode());
+        return bookingDTO;
+    }
+
+    public static RoomDTO mapRoomEntitytoRoomDTOPlusBookings(Room room)
+    {
+        RoomDTO roomDTO = new RoomDTO();
+        roomDTO.setId(room.getId());
+        roomDTO.setRoomType(room.getRoomType());
+        roomDTO.setRoomPrice(room.getRoomPrice());
+        roomDTO.setRoomPhotoUrl(room.getRoomPhotoUrl());
+        roomDTO.setRoomDescription(room.getRoomDescription());
+
+        if(room.getBookings() != null)
+        {
+            roomDTO.setBookings(room.getBookings().stream().map(Utils::mapBookingEntityToBookingDTO).collect(Collectors.toList()));
+        }
+
+        return roomDTO;
+    }
+
+    public static BookingDTO mapBookingEntitytoBookingDTOPlusBookedRooms(Booking booking, boolean mapUser)
+    {
+        BookingDTO bookingDTO = new BookingDTO();
+        bookingDTO.setId(booking.getId());
+        bookingDTO.setCheckInDate(booking.getCheckInDate());
+        bookingDTO.setCheckOutDate(booking.getCheckOutDate());
+        bookingDTO.setNumOfChildren(booking.getNumOfChildren());
+        bookingDTO.setNumOfAdults(booking.getNumOfAdults());
+        bookingDTO.setTotalNumOfGuests(booking.getTotalNumOfGuests());
+        bookingDTO.setBookingConfirmationCode(booking.getBookingConfirmationCode());
+
+        if(mapUser)
+        {
+            bookingDTO.setUser(Utils.mapUserEntityToUserDTO(booking.getUser()));
+        }
+        if(booking.getRoom() != null)
+        {
+            RoomDTO roomDTO = new RoomDTO();
+            roomDTO.setId(booking.getRoom().getId());
+            roomDTO.setRoomType(booking.getRoom().getRoomType());
+            roomDTO.setRoomPrice(booking.getRoom().getRoomPrice());
+            roomDTO.setRoomPhotoUrl(booking.getRoom().getRoomPhotoUrl());
+            roomDTO.setRoomDescription(booking.getRoom().getRoomDescription());
+            bookingDTO.setRoom(roomDTO);
+        }
+
+        return bookingDTO;
+    }
+
+    public static UserDTO mapUserEntityToUserDTOPlusUserBookingsAndRoom(User user){
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setRole(user.getRole());
+
+        if (!user.getBookings().isEmpty()){
+            userDTO.setBookings(user.getBookings().stream().map(booking -> mapBookingEntitytoBookingDTOPlusBookedRooms(booking, false)).collect(Collectors.toList()));
+        }
+        return userDTO;
+    }
+
+    public static List<UserDTO> mapUserListEntityToUserListDTO(List<User> userList){
+        return userList.stream().map(Utils::mapUserEntityToUserDTO).collect(Collectors.toList());
+    }
+
+    public static List<RoomDTO> mapRoomListEntityToRoomListDTO(List<Room> roomList){
+        return roomList.stream().map(Utils::mapRoomEntityToRoomDTO).collect(Collectors.toList());
+    }
+    public static List<BookingDTO> mapBookingListEntityToBookingListDTO(List<Booking> bookingList){
+        return bookingList.stream().map(Utils::mapBookingEntityToBookingDTO).collect(Collectors.toList());
+    }
+
 }
