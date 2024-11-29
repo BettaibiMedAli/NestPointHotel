@@ -13,30 +13,28 @@ import java.util.UUID;
 @Service
 public class ImageStorageService {
 
-    private final String uploadDirectory; // Define your local storage path
+    private final String uploadDirectory;
 
     public ImageStorageService(String uploadDirectory) {
         this.uploadDirectory = uploadDirectory;
     }
 
     public String saveImage(MultipartFile image) throws IOException {
-        String fileName = UUID.randomUUID().toString() + "." + getExtension(image); // Generate unique filename
+        String fileName = UUID.randomUUID().toString() + "." + getExtension(image);
         Path filePath = Paths.get(uploadDirectory, fileName);
 
-        // Create upload directory if it doesn't exist
         File uploadDir = filePath.getParent().toFile();
         if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
+            uploadDir.mkdirs(); // if the directory does not exist, it creates a new one :)
         }
 
-        // Write image data to the local file
         Files.write(filePath, image.getBytes());
 
-        return filePath.toString(); // Return the full path to the saved image
+        return filePath.toString();
     }
 
     private String getExtension(MultipartFile image) {
         String originalFileName = image.getOriginalFilename();
         return originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-    }
+    } // this is a helper method to extract the file extension
 }
