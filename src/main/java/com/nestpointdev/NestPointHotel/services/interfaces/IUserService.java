@@ -4,7 +4,7 @@ import com.nestpointdev.NestPointHotel.dto.LoginRequest;
 import com.nestpointdev.NestPointHotel.dto.Response;
 import com.nestpointdev.NestPointHotel.models.User;
 
-public interface IUserInterface {
+public interface IUserService {
     Response register(User user);
     Response login(LoginRequest loginRequest);
     Response getAllUsers();
