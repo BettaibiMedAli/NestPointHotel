@@ -1,5 +1,6 @@
 package com.nestpointdev.NestPointHotel.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,7 @@ public class ImageStorageService {
 
     private final String uploadDirectory;
 
-    public ImageStorageService(String uploadDirectory) {
+    public ImageStorageService(@Value("${upload.directory}") String uploadDirectory) {
         this.uploadDirectory = uploadDirectory;
     }
 
