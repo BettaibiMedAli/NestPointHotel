@@ -5,8 +5,11 @@ import com.nestpointdev.NestPointHotel.models.Booking;
 
 public interface IBookingService {
     Response saveBooking(Long roomId, Long userId, Booking bookingRequest);
+
     Response findBookingByConfirmationCode(String ConfirmationCode);
+
     Response getAllBookings();
-    Response cancelBooking();
+
+    Response cancelBooking(Long bookingId);
 
 }

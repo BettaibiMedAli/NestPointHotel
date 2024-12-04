@@ -35,7 +35,7 @@ public class RoomService implements IRoomService {
     public Response addNewRoom(MultipartFile image, String roomType, BigDecimal roomPrice, String description) {
         Response response = new Response();
 
-        try{
+        try {
             String imageUrl = imageStorageService.saveImage(image);
             Room room = new Room();
             room.setRoomPhotoUrl(imageUrl);
@@ -50,8 +50,7 @@ public class RoomService implements IRoomService {
             response.setMessage("Successful");
             response.setStatusCode(200);
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error adding the room " + e.getMessage());
         }
@@ -67,16 +66,15 @@ public class RoomService implements IRoomService {
     public Response getAllRooms() {
         Response response = new Response();
 
-        try{
-            List<Room> roomList = roomRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
+        try {
+            List<Room> roomList = roomRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
             List<RoomDTO> roomDTOList = Utils.mapRoomListEntityToRoomListDTO(roomList);
 
 
             response.setMessage("Successful");
             response.setStatusCode(200);
             response.setRoomList(roomDTOList);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error getting all rooms " + e.getMessage());
         }
@@ -87,19 +85,17 @@ public class RoomService implements IRoomService {
     public Response deleteRoom(Long roomId) {
         Response response = new Response();
 
-        try{
+        try {
             roomRepository.findById(roomId).orElseThrow(() -> new MyException("Room not found!"));
             roomRepository.deleteById(roomId);
 
             response.setMessage("Successful");
             response.setStatusCode(200);
-        }catch (MyException e)
-        {
+        } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage(e.getMessage());
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error deleting a room " + e.getMessage());
         }
@@ -110,17 +106,16 @@ public class RoomService implements IRoomService {
     public Response updateRoom(Long roomId, String description, String roomType, BigDecimal roomPrice, MultipartFile image) {
         Response response = new Response();
 
-        try{
+        try {
             String imageUrl = null;
-            if(image != null && !image.isEmpty())
-            {
+            if (image != null && !image.isEmpty()) {
                 imageUrl = imageStorageService.saveImage(image);
             }
             Room room = roomRepository.findById(roomId).orElseThrow(() -> new MyException("Room not found!"));
-            if(roomType != null) room.setRoomType(roomType);
-            if(roomPrice != null) room.setRoomPrice(roomPrice);
-            if(description != null) room.setRoomType(description);
-            if(imageUrl != null) room.setRoomType(imageUrl);
+            if (roomType != null) room.setRoomType(roomType);
+            if (roomPrice != null) room.setRoomPrice(roomPrice);
+            if (description != null) room.setRoomType(description);
+            if (imageUrl != null) room.setRoomType(imageUrl);
 
             Room updatedRoom = roomRepository.save(room);
             RoomDTO roomDTO = Utils.mapRoomEntityToRoomDTO(updatedRoom);
@@ -128,8 +123,7 @@ public class RoomService implements IRoomService {
             response.setMessage("Successful");
             response.setStatusCode(200);
             response.setRoom(roomDTO);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error updating a room " + e.getMessage());
         }
@@ -140,19 +134,17 @@ public class RoomService implements IRoomService {
     public Response getRoomById(Long roomId) {
         Response response = new Response();
 
-        try{
+        try {
             Room room = roomRepository.findById(roomId).orElseThrow(() -> new MyException("Room not found!"));
             RoomDTO roomDTO = Utils.mapRoomEntitytoRoomDTOPlusBookings(room);
             response.setMessage("Successful");
             response.setStatusCode(200);
             response.setRoom(roomDTO);
-        }catch (MyException e)
-        {
+        } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage(e.getMessage());
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error getting room by id " + e.getMessage());
         }
@@ -163,15 +155,14 @@ public class RoomService implements IRoomService {
     public Response getAvailableRoomsbyDateAndType(LocalDate checkInData, LocalDate checkOutDate, String roomType) {
         Response response = new Response();
 
-        try{
+        try {
             List<Room> availableRooms = roomRepository.findAvailableRoomsByDateAndTypes(checkInData, checkOutDate, roomType);
             List<RoomDTO> roomDTOList = Utils.mapRoomListEntityToRoomListDTO(availableRooms);
 
             response.setMessage("Successful");
             response.setStatusCode(200);
             response.setRoomList(roomDTOList);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error getting available rooms " + e.getMessage());
         }
@@ -182,14 +173,13 @@ public class RoomService implements IRoomService {
     public Response getAllAvailableRooms() {
         Response response = new Response();
 
-        try{
+        try {
             List<Room> roomList = roomRepository.getAllAvailableRooms();
             List<RoomDTO> roomDTOList = Utils.mapRoomListEntityToRoomListDTO(roomList);
             response.setMessage("Successful");
             response.setStatusCode(200);
             response.setRoomList(roomDTOList);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error getting available rooms " + e.getMessage());
         }

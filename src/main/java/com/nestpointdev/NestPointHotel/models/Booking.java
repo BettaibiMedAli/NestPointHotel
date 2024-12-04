@@ -36,8 +36,7 @@ public class Booking {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    public void calculateTotalNumber ()
-    {
+    public void calculateTotalNumber() {
         this.totalNumOfGuests = this.numOfAdults + this.numOfChildren;
     }
 
@@ -51,6 +50,7 @@ public class Booking {
         this.numOfChildren = numOfChildren;
         calculateTotalNumber();
     }
+
     @Override
     public String toString() {
         return "Booking{" +
