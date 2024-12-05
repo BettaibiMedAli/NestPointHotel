@@ -47,7 +47,7 @@ public class RoomController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/allTypes")
     public List<String> getRoomsTypes()
     {
         return roomService.getAllRoomTypes();

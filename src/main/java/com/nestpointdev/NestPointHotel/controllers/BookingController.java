@@ -17,7 +17,7 @@ public class BookingController {
     @Autowired
     private IBookingService bookingService;
 
-    @PostMapping("/bookRoom/{roomId}/{userId}}")
+    @PostMapping("/bookRoom/{roomId}/{userId}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<Response> bookRoom(@PathVariable()Long roomId,
                                             @PathVariable() Long userId,
