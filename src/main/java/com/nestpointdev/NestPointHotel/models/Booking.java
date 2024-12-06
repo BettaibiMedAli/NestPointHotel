@@ -18,7 +18,6 @@ public class Booking {
 
     @NotNull(message = "Check in date is required")
     private LocalDate checkInDate;
-    @Future(message = "Check out date should be in the future")
     private LocalDate checkOutDate;
     @Min(value = 1, message = "Number of adults should not be less than One")
     private int numOfAdults;
