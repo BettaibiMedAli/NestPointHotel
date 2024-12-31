@@ -30,7 +30,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwtToken;
         final String userEmail;
-        if (authHeader == null || authHeader.isBlank()) {
+        String path = request.getRequestURI();
+        if (path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/") || authHeader == null || authHeader.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
